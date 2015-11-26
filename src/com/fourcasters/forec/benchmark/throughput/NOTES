@@ -1,0 +1,16 @@
+Benchmark aim:
+
+- Measure the potential number of messages the server can deliver in a time unit (i.e. second), given the size of the message and the client connection strategy.
+
+Benchmark procedure:
+
+- A script able to start and stop the server.
+- Create X clients Monitor, which connect to the server and record the messages being received.
+- Create Y (possibly constant, possibly function of time) clients Sender whose only purpose is to send N messages per time unit.
+- At the end of the benchmark the Monitors' recording will be collected and possibly charted.
+
+The client connection strategy can have an impact on the outcome of this benchmark where the connection to the server interferes with the broadcasting task.
+
+Notes:
+- remember to pin the clients to a set of cpus, possibly independent to the ones dedicated to the server, if it is run on the same host.
+- the client would have to avoid creation of any garbage, so that GC won't skew the results.
