@@ -1,6 +1,8 @@
 package com.fourcasters.forec.benchmark.throughput;
 
-public class SenderClient {
+import com.fourcasters.forec.benchmark.launcher.Client;
+
+public class SenderClient implements Client {
 
 	//TODO
 	/**
