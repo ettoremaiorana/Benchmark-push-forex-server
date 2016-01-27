@@ -1,7 +1,5 @@
 package com.fourcasters.forec.benchmark.throughput;
 
-import java.util.concurrent.locks.LockSupport;
-
 import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.Context;
 import org.zeromq.ZMQ.Socket;
