@@ -1,16 +1,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>forec</groupId>
-	<artifactId>zeromq-node-java-benchmark</artifactId>
+	<groupId>com.fourcasters.forec</groupId>
+	<artifactId>macro-benchmarking</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Benchmark-push-forec-server</name>
+	<name>Benchmark-push-forex-server</name>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.zeromq</groupId>
 			<artifactId>jzmq</artifactId>
-			<version>3.1.0</version>
+			<version>3.1.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -44,7 +44,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>com.fourcasters.forec.launcher.MainClass</mainClass>
+							<mainClass>com.fourcasters.forec.benchmark.launcher.MainClass</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>

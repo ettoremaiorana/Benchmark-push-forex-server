@@ -20,13 +20,14 @@ public class MonitorClient implements Client {
 	private static final int[] EMTPY_RESULT = new int[0];
 
 	private volatile boolean work = false;
-	private int counter = 0;
 	private long finalTime;
 	private long initialTime;
 	private final int[] msgsPerSecond = new int[SECONDS_IN_ONE_HOUR];
-	private final byte[] dest = new byte[1024];
+	private final byte[] dest = new byte[16];
+	private final byte[] dest1 = new byte[16];
 	private final ByteBuffer buffer = ByteBuffer.allocateDirect(1024).order(ByteOrder.nativeOrder());
 	private Thread currentThread;
+	private int counter = 0;
 
 	/**
 	 * - Receives messages and records their arrivals in slot of time units.
@@ -43,27 +44,21 @@ public class MonitorClient implements Client {
         subscriber.subscribe("topics".getBytes());
         LOG.info("Connected and subscribed");
         work = true;
+        registerSignalHandler();
         while (work) {
-        	int count = subscriber.recvZeroCopy(buffer, 1024, 0);
+        	int count = subscriber._recvDirectBuffer(buffer, 16, ZMQ.DONTWAIT);
+//        	int count = subscriber.recvByteBuffer(buffer, ZMQ.DONTWAIT);
         	if (count <= 0) {
         		continue;
         	}
-        	count = 0;
-        	buffer.clear();
-        	while (count == 0) {
-        		count = subscriber.recvZeroCopy(buffer, 1024, 0);
-        	}
-        	buffer.flip();
-        	buffer.get(dest, 0, count);
         	final long arrivalTime = System.currentTimeMillis();
         	final int slot = (int) ((arrivalTime - initialTime) / 1000);
         	msgsPerSecond[slot] = msgsPerSecond[slot] + 1;
         	//We're not interested in the content of the message
         	buffer.clear();
         	Arrays.fill(dest, (byte)0);
-        	if (++counter % 100 == 0) {
-        		LOG.info("100 messages");
-        	}
+        	Arrays.fill(dest1, (byte)0);
+        	counter  ++;
         }
         subscriber.close();
         context.close();
@@ -75,10 +70,15 @@ public class MonitorClient implements Client {
 		currentThread.interrupt();
 	}
 
+	private void registerSignalHandler() {
+		ZMQ.register_signalhandler();
+	}
+	
 	public int[] getResults() {
 		if (work) {
 			return EMTPY_RESULT;
 		}
+		System.out.println("Counter: " + counter);
     	final int slot = (int) ((finalTime - initialTime) / 1000);
     	return Arrays.copyOf(msgsPerSecond, slot);
 	}

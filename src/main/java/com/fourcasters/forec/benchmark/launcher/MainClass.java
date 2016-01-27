@@ -30,6 +30,7 @@ public class MainClass {
 				client.receive("localhost", 5562, System.currentTimeMillis());
 			}
 		});
+		t.setName("Client thread");
 		t.setDaemon(true);
 		t.start();
 		for(int i = 0; i < 6; i++) {
@@ -41,5 +42,7 @@ public class MainClass {
 		t.join();
 		int[] results = client.getResults();
 		System.out.println("Results: " + Arrays.toString(results));
+		System.out.println("Avg: " + Arrays.stream(results)
+                .sum()/results.length);
 	}
 }
